@@ -15,6 +15,7 @@ const Board = () => {
   useEffect(() => {
     if (startPos[0] && startPos[1]) {
       if (canvasContext) {
+        canvasContext.fillStyle = "black";
         canvasContext.beginPath();
         canvasContext.moveTo(startPos[0], startPos[1]);
         setIsPathInitiated(true);
@@ -45,11 +46,13 @@ const Board = () => {
   };
 
   useEffect(() => {
-    if (cursorPos[0] && cursorPos[1]) {
+    if (cursorPos[0] && cursorPos[1] && isPathInitiated) {
+      console.log("changing");
       // path initiated and cursor moving
-      // canvasContext.moveTo(cursorPos[0], cursorPos[1]);
+      canvasContext.lineTo(cursorPos[0], cursorPos[1]);
+      canvasContext.stroke();
     }
-  }, cursorPos);
+  }, [cursorPos]);
 
   return (
     <div>
