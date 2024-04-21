@@ -1,6 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+// Board.js
+import React, { useEffect, useRef, useState } from "react";
 
 const Board = () => {
+  const screenDimensions = [window.screen.width, window.screen.height];
   const [canvasContext, setCanvasContext] = useState(null);
   const [startPos, setStartPos] = useState([null, null]);
   const [endPos, setEndPos] = useState([null, null]);
@@ -20,7 +22,6 @@ const Board = () => {
         canvasContext.fillStyle = "black";
         canvasContext.beginPath();
         canvasContext.moveTo(startPos[0], startPos[1]);
-
         setIsPathInitiated(true);
         console.log("path initiated...");
       }
@@ -34,7 +35,6 @@ const Board = () => {
         setCursorPos([null, null]);
         console.log("path terminated");
         canvasContext.lineTo(endPos[0], endPos[1]);
-        // make line till x, y
         canvasContext.stroke();
       }
     }
@@ -62,18 +62,10 @@ const Board = () => {
 
   useEffect(() => {
     if (cursorPos[0] && cursorPos[1] && isPathInitiated) {
-      console.log("changing");
-      // path initiated and cursor to be moved
-      // canvasContext.lineTo(cursorPos[0], cursorPos[1]);
-      // canvasContext.moveTo(cursorPos[0], cursorPos[1]);
-
-      // clear the canvas
-      canvasContext.clearRect(0, 0, 600, 300);
+      canvasContext.clearRect(0, 0, screenDimensions[0], screenDimensions[1]);
       if (linesCoordinates.length > 0) {
         redrawLines();
       }
-
-      // making new line
       canvasContext.beginPath();
       canvasContext.moveTo(startPos[0], startPos[1]);
       canvasContext.lineTo(cursorPos[0], cursorPos[1]);
@@ -82,51 +74,42 @@ const Board = () => {
   }, [cursorPos]);
 
   return (
-    <div>
-      <center>
-        <canvas
-          id="canvas"
-          ref={canvasRef}
-          width={600}
-          height={300}
-          style={{
-            backgroundColor: "red",
-          }}
-          onMouseMove={(e) => {
-            setCursorPos(getRelativePointCoordinates(e.clientX, e.clientY));
-          }}
-          onClick={(e) => {
-            if (!isPathInitiated) {
-              setStartPos(getRelativePointCoordinates(e.clientX, e.clientY));
-              setLinesCoordinates([
-                ...linesCoordinates,
-                {
-                  startFrom: getRelativePointCoordinates(e.clientX, e.clientY),
-                  endTo: [null, null],
-                },
-              ]);
-            } else {
-              setEndPos(getRelativePointCoordinates(e.clientX, e.clientY));
-              const lastLineCoord =
-                linesCoordinates[linesCoordinates.length - 1];
-              const copiedLinesCoordinates = linesCoordinates.slice(
-                0,
-                linesCoordinates.length - 1
-              );
-              lastLineCoord.endTo = getRelativePointCoordinates(
-                e.clientX,
-                e.clientY
-              );
-              console.log(
-                "end:",
-                getRelativePointCoordinates(e.clientX, e.clientY)
-              );
-              setLinesCoordinates([...copiedLinesCoordinates, lastLineCoord]);
-            }
-          }}
-          tabIndex={0}
-        ></canvas>
-      </center>
+    <div className="flex justify-center items-center h-screen w-screen">
+      <canvas
+        className="bg-white border border-black rounded-xl"
+        id="canvas"
+        ref={canvasRef}
+        width={screenDimensions[0] / 1.3}
+        height={screenDimensions[1] / 1.3}
+        onMouseMove={(e) => {
+          setCursorPos(getRelativePointCoordinates(e.clientX, e.clientY));
+        }}
+        onClick={(e) => {
+          if (!isPathInitiated) {
+            setStartPos(getRelativePointCoordinates(e.clientX, e.clientY));
+            setLinesCoordinates([
+              ...linesCoordinates,
+              {
+                startFrom: getRelativePointCoordinates(e.clientX, e.clientY),
+                endTo: [null, null],
+              },
+            ]);
+          } else {
+            setEndPos(getRelativePointCoordinates(e.clientX, e.clientY));
+            const lastLineCoord = linesCoordinates[linesCoordinates.length - 1];
+            const copiedLinesCoordinates = linesCoordinates.slice(
+              0,
+              linesCoordinates.length - 1
+            );
+            lastLineCoord.endTo = getRelativePointCoordinates(
+              e.clientX,
+              e.clientY
+            );
+            setLinesCoordinates([...copiedLinesCoordinates, lastLineCoord]);
+          }
+        }}
+        tabIndex={0}
+      ></canvas>
     </div>
   );
 };
