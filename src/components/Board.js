@@ -1,7 +1,7 @@
 // Board.js
 import React, { useEffect, useRef, useState } from "react";
 
-const Board = () => {
+const Board = ({ clear, setClear }) => {
   const screenDimensions = [window.screen.width, window.screen.height];
   const [canvasContext, setCanvasContext] = useState(null);
   const [startPos, setStartPos] = useState([null, null]);
@@ -15,6 +15,15 @@ const Board = () => {
   useEffect(() => {
     setCanvasContext(canvasRef.current.getContext("2d"));
   }, []);
+
+  useEffect(() => {
+    if (clear) {
+      setClear(false);
+      setLinesCoordinates([]); // erase everything from board
+      canvasContext.clearRect(0, 0, screenDimensions[0], screenDimensions[1]);
+      console.log("cleared");
+    }
+  }, [clear]);
 
   useEffect(() => {
     if (startPos[0] && startPos[1]) {
@@ -74,7 +83,7 @@ const Board = () => {
   }, [cursorPos]);
 
   return (
-    <div className="flex justify-center items-center h-screen w-screen">
+    <div className="flex items-center h-screen w-screen">
       <canvas
         className="bg-white border border-black rounded-xl"
         id="canvas"
