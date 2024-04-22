@@ -20,7 +20,9 @@ const Board = ({ clear, setClear, line, setLine, rect, setRect }) => {
   useEffect(() => {
     if (clear) {
       setClear(false);
-      setLinesCoordinates([]); // erase everything from board
+      // erase everything from board
+      setLinesCoordinates([]);
+      setRectCoordinates([]);
       canvasContext.clearRect(0, 0, screenDimensions[0], screenDimensions[1]);
       console.log("cleared");
     }
@@ -51,17 +53,20 @@ const Board = ({ clear, setClear, line, setLine, rect, setRect }) => {
   const endLine = () => {
     console.log(line);
     if (canvasContext) {
-      setIsPathInitiated(false);
-      setCursorPos([null, null]);
       console.log("path terminated");
       canvasContext.lineTo(endPos[0], endPos[1]);
       canvasContext.stroke();
+      setCursorPos([null, null]);
+      setIsPathInitiated(false);
       setLine();
     }
   };
 
   useEffect(() => {
     if (endPos[0] && endPos[1]) {
+      clearCanvas();
+      redrawLines();
+      redrawRects();
       if (line) endLine();
       if (rect) {
         canvasContext.strokeRect(
@@ -70,7 +75,6 @@ const Board = ({ clear, setClear, line, setLine, rect, setRect }) => {
           endPos[0] - startPos[0],
           endPos[1] - startPos[1]
         );
-
         setIsPathInitiated(false);
         setRect(); // to change of rect to false, as rect is made
       }
@@ -149,6 +153,7 @@ const Board = ({ clear, setClear, line, setLine, rect, setRect }) => {
         },
       ]);
     } else {
+      console.log("ending line");
       setEndPos(relCoordinates);
       const lastLineCoord = linesCoordinates[linesCoordinates.length - 1];
       const copiedLinesCoordinates = linesCoordinates.slice(
@@ -179,7 +184,6 @@ const Board = ({ clear, setClear, line, setLine, rect, setRect }) => {
         0,
         rectCoordinates.length - 1
       );
-      console.log(rectCoordinates);
       lastRectCoord.endTo = relCoordinates;
       setRectCoordinates([...copiedRectsCoordinates, lastRectCoord]);
     }
@@ -188,7 +192,7 @@ const Board = ({ clear, setClear, line, setLine, rect, setRect }) => {
   return (
     <div
       className={`flex items-center h-screen w-screen ${
-        line || rect ? "cursor-crosshair" : "cursor-pointer"
+        line || rect ? "cursor-crosshair" : "cursor-default"
       }`}
     >
       <canvas
