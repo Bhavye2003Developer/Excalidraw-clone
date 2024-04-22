@@ -5,6 +5,8 @@ import ToolsPanel from "./ToolsPanel";
 const Body = () => {
   const [toolState, setToolState] = useState({
     clear: false,
+    line: false, // if true, draw the line on canvas
+    rect: false,
   });
 
   return (
@@ -14,6 +16,14 @@ const Body = () => {
         clear={toolState.clear}
         setClear={() => {
           setToolState({ ...toolState, clear: false });
+        }}
+        line={toolState.line}
+        setLine={() => {
+          setToolState({ ...toolState, line: false });
+        }}
+        rect={toolState.rect}
+        setRect={() => {
+          setToolState({ ...toolState, rect: false });
         }}
       />
     </div>

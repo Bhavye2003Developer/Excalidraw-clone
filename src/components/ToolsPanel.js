@@ -12,6 +12,28 @@ const ToolsPanel = ({ toolState, setToolState }) => {
             Clear
           </button>
         </li>
+        <br />
+        <li>
+          <button
+            className="border border-blue-500 bg-blue-400 py-1 px-2 rounded-xl hover:bg-blue-600"
+            onClick={() => {
+              setToolState({ ...toolState, line: true });
+            }}
+          >
+            Line
+          </button>
+        </li>
+        <br />
+        <li>
+          <button
+            className="border border-blue-500 bg-blue-400 py-1 px-2 rounded-xl hover:bg-blue-600"
+            onClick={() => {
+              setToolState({ ...toolState, rect: true });
+            }}
+          >
+            Rectangle
+          </button>
+        </li>
       </ul>
     </div>
   );

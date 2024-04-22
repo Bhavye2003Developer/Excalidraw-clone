@@ -4,7 +4,7 @@
   "description": "Excalidraw clone",
   "main": "index.js",
   "scripts": {
-    "start": "rm -rf .parcel-cache dist && parcel index.html",
+    "start": "rm -rf ./parcel-cache dist && parcel index.html",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Bhavye",
