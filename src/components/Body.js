@@ -7,6 +7,7 @@ const Body = () => {
     clear: false,
     line: false, // if true, draw the line on canvas
     rect: false,
+    circle: false
   });
 
   return (
@@ -24,6 +25,10 @@ const Body = () => {
         rect={toolState.rect}
         setRect={() => {
           setToolState({ ...toolState, rect: false });
+        }}
+        circle={toolState.circle}
+        setCircle={() => {
+          setToolState({ ...toolState, circle: false });
         }}
       />
     </div>

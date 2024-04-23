@@ -1,7 +1,16 @@
-// Board.js
+// FastDraw
 import React, { useEffect, useRef, useState } from "react";
 
-const Board = ({ clear, setClear, line, setLine, rect, setRect }) => {
+const Board = ({
+  clear,
+  setClear,
+  line,
+  setLine,
+  rect,
+  setRect,
+  circle,
+  setCircle,
+}) => {
   const screenDimensions = [window.screen.width, window.screen.height];
   const [canvasContext, setCanvasContext] = useState(null);
   const [startPos, setStartPos] = useState([null, null]); // (x1, y1)
@@ -10,6 +19,7 @@ const Board = ({ clear, setClear, line, setLine, rect, setRect }) => {
   const [cursorPos, setCursorPos] = useState([null, null]);
   const [linesCoordinates, setLinesCoordinates] = useState([]);
   const [rectCoordinates, setRectCoordinates] = useState([]);
+  const [circleCoordinates, setCircleCoordinates] = useState([]);
 
   const canvasRef = useRef();
 
@@ -47,6 +57,10 @@ const Board = ({ clear, setClear, line, setLine, rect, setRect }) => {
         initiatePath();
         console.log("path initiated for rect...");
       }
+      if (circle) {
+        initiatePath();
+        console.log("path inititaed for circle...");
+      }
     }
   }, [startPos]);
 
@@ -67,6 +81,7 @@ const Board = ({ clear, setClear, line, setLine, rect, setRect }) => {
       clearCanvas();
       redrawLines();
       redrawRects();
+      redrawCircles();
       if (line) endLine();
       if (rect) {
         canvasContext.strokeRect(
@@ -77,6 +92,19 @@ const Board = ({ clear, setClear, line, setLine, rect, setRect }) => {
         );
         setIsPathInitiated(false);
         setRect(); // to change of rect to false, as rect is made
+      }
+      if (circle) {
+        console.log("ending...");
+        const x = (startPos[0] + endPos[0]) / 2;
+        const y = (startPos[1] + endPos[1]) / 2;
+        const [radiusX, radiusY] = generateCircleProperties(
+          ...startPos,
+          ...endPos
+        );
+        canvasContext.ellipse(x, y, radiusX, radiusY, 0, 0, 2 * Math.PI);
+        canvasContext.stroke();
+        setIsPathInitiated(false);
+        setCircle();
       }
     }
   }, [endPos]);
@@ -98,7 +126,6 @@ const Board = ({ clear, setClear, line, setLine, rect, setRect }) => {
         canvasContext.stroke();
       }
     }
-    console.log("redrawn");
   };
 
   const redrawRects = () => {
@@ -110,6 +137,31 @@ const Board = ({ clear, setClear, line, setLine, rect, setRect }) => {
           rectObj.endTo[0] - rectObj.startFrom[0],
           rectObj.endTo[1] - rectObj.startFrom[1]
         );
+      }
+    }
+  };
+
+  const generateCircleProperties = (x1, y1, x2, y2) => {
+    const x_distance = Math.pow(
+      Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2),
+      1 / 2
+    );
+    const y_distance = Math.abs(y2 - y1);
+    return [x_distance, y_distance];
+  };
+
+  const redrawCircles = () => {
+    for (const circleObj of circleCoordinates) {
+      if (circleObj.endTo[0] && circleObj.endTo[1]) {
+        const x = (circleObj.startFrom[0] + circleObj.endTo[0]) / 2;
+        const y = (circleObj.startFrom[1] + circleObj.endTo[1]) / 2;
+        const [radiusX, radiusY] = generateCircleProperties(
+          ...circleObj.startFrom,
+          ...circleObj.endTo
+        );
+        canvasContext.beginPath();
+        canvasContext.ellipse(x, y, radiusX, radiusY, 0, 0, 2 * Math.PI);
+        canvasContext.stroke();
       }
     }
   };
@@ -135,9 +187,22 @@ const Board = ({ clear, setClear, line, setLine, rect, setRect }) => {
           cursorPos[1] - startPos[1]
         );
       }
+      if (circle) {
+        console.log("changing");
+        const x = (startPos[0] + cursorPos[0]) / 2;
+        const y = (startPos[1] + cursorPos[1]) / 2;
+        const [radiusX, radiusY] = generateCircleProperties(
+          ...startPos,
+          ...cursorPos
+        );
+        canvasContext.beginPath();
+        canvasContext.ellipse(x, y, radiusX, radiusY, 0, 0, 2 * Math.PI);
+        canvasContext.stroke();
+      }
     }
     redrawLines();
     redrawRects();
+    redrawCircles();
   }, [cursorPos]);
 
   const constructLine = (e) => {
@@ -189,10 +254,36 @@ const Board = ({ clear, setClear, line, setLine, rect, setRect }) => {
     }
   };
 
+  const constructCircle = (e) => {
+    console.log("circle clicked");
+    const relCoordinates = getRelativePointCoordinates(e.clientX, e.clientY); // relative coordinates of the mouse wrt canvas
+    if (!isPathInitiated) {
+      console.log("circle started...");
+      setStartPos(relCoordinates);
+      setCircleCoordinates([
+        ...circleCoordinates,
+        {
+          startFrom: relCoordinates,
+          endTo: [null, null],
+        },
+      ]);
+    } else {
+      console.log("ending circle...");
+      setEndPos(relCoordinates);
+      const lastCircleCoord = circleCoordinates[circleCoordinates.length - 1];
+      const copiedCirclesCoordinates = circleCoordinates.slice(
+        0,
+        circleCoordinates.length - 1
+      );
+      lastCircleCoord.endTo = relCoordinates;
+      setCircleCoordinates([...copiedCirclesCoordinates, lastCircleCoord]);
+    }
+  };
+
   return (
     <div
       className={`flex items-center h-screen w-screen ${
-        line || rect ? "cursor-crosshair" : "cursor-default"
+        line || rect || circle ? "cursor-crosshair" : "cursor-default"
       }`}
     >
       <canvas
@@ -211,6 +302,10 @@ const Board = ({ clear, setClear, line, setLine, rect, setRect }) => {
           }
           if (rect) {
             constructRect(e);
+            return;
+          }
+          if (circle) {
+            constructCircle(e);
             return;
           }
         }}
