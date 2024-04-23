@@ -77,6 +77,7 @@ const Board = ({
   }, [startPos]);
 
   useEffect(() => {
+    console.log("path terminated");
     if (endPos[0] && endPos[1] && canvasContext) {
       clearCanvas();
       redrawAllObjects();

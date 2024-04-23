@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Board from "./Board";
 import ToolsPanel from "./ToolsPanel";
 
@@ -10,6 +10,8 @@ const Body = () => {
     circle: false,
     freeHand: false,
   });
+
+  const [canvasURL, setCanvasURL] = useState(null);
 
   return (
     <div className="flex">
@@ -36,6 +38,15 @@ const Body = () => {
           setToolState({ ...toolState, freeHand: false });
         }}
       />
+      {/* <button
+        onClick={() => {
+          setCanvasURL(document.getElementById("canvas").toDataURL());
+        }}
+      >
+        <a href={canvasURL} download={"user_image"}>
+          EXPORT
+        </a>
+      </button> */}
     </div>
   );
 };
