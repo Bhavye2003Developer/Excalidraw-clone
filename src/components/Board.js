@@ -348,7 +348,7 @@ const Board = ({
     }
   };
 
-  const constructFreeHandLine = (e) => {
+  const constructFreeHandWriting = (e) => {
     const relCoordinates = getRelativePointCoordinates(e.clientX, e.clientY); // relative coordinates of the mouse wrt canvas
     if (!isPathInitiated) {
       setStartPos(relCoordinates);
@@ -395,7 +395,7 @@ const Board = ({
             return;
           }
           if (freeHand) {
-            constructFreeHandLine(e);
+            constructFreeHandWriting(e);
             return;
           }
         }}
