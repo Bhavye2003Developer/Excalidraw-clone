@@ -45,6 +45,17 @@ const ToolsPanel = ({ toolState, setToolState }) => {
             Circle
           </button>
         </li>
+        <br />
+        <li>
+          <button
+            className="border border-blue-500 bg-blue-400 py-1 px-2 rounded-xl hover:bg-blue-600"
+            onClick={() => {
+              setToolState({ ...toolState, freeHand: true });
+            }}
+          >
+            Free hand
+          </button>
+        </li>
       </ul>
     </div>
   );
