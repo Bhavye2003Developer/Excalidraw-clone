@@ -1,6 +1,9 @@
 // FastDraw
 import React, { useEffect, useRef, useState } from "react";
-import { generateCircleRadii, getRelativePointCoordinates } from "../utils/utils";
+import {
+  generateCircleRadii,
+  getRelativePointCoordinates,
+} from "../utils/utils";
 
 const Board = ({
   clear,
@@ -235,7 +238,11 @@ const Board = ({
   }, [cursorPos]);
 
   const constructLine = (e) => {
-    const relCoordinates = getRelativePointCoordinates(e.clientX, e.clientY, canvasRef); // relative coordinates of the mouse wrt canvas
+    const relCoordinates = getRelativePointCoordinates(
+      e.clientX,
+      e.clientY,
+      canvasRef
+    ); // relative coordinates of the mouse wrt canvas
     if (!isPathInitiated) {
       setStartPos(relCoordinates);
 
@@ -268,7 +275,11 @@ const Board = ({
   };
 
   const constructRect = (e) => {
-    const relCoordinates = getRelativePointCoordinates(e.clientX, e.clientY, canvasRef); // relative coordinates of the mouse wrt canvas
+    const relCoordinates = getRelativePointCoordinates(
+      e.clientX,
+      e.clientY,
+      canvasRef
+    ); // relative coordinates of the mouse wrt canvas
     if (!isPathInitiated) {
       setStartPos(relCoordinates);
 
@@ -301,7 +312,11 @@ const Board = ({
   };
 
   const constructCircle = (e) => {
-    const relCoordinates = getRelativePointCoordinates(e.clientX, e.clientY, canvasRef); // relative coordinates of the mouse wrt canvas
+    const relCoordinates = getRelativePointCoordinates(
+      e.clientX,
+      e.clientY,
+      canvasRef
+    ); // relative coordinates of the mouse wrt canvas
     if (!isPathInitiated) {
       setStartPos(relCoordinates);
 
@@ -334,7 +349,11 @@ const Board = ({
   };
 
   const constructFreeHandWriting = (e) => {
-    const relCoordinates = getRelativePointCoordinates(e.clientX, e.clientY, canvasRef); // relative coordinates of the mouse wrt canvas
+    const relCoordinates = getRelativePointCoordinates(
+      e.clientX,
+      e.clientY,
+      canvasRef
+    ); // relative coordinates of the mouse wrt canvas
     if (!isPathInitiated) {
       setStartPos(relCoordinates);
       setDisplayObjects({
@@ -353,7 +372,7 @@ const Board = ({
 
   return (
     <div
-      className={`flex items-center h-screen w-screen ${
+      className={`flex-grow mt-5 ${
         line || rect || circle ? "cursor-crosshair" : "cursor-default"
       }`}
     >
@@ -362,9 +381,11 @@ const Board = ({
         id="canvas"
         ref={canvasRef}
         width={screenDimensions[0] / 1.3}
-        height={screenDimensions[1] / 1.3}
+        height={screenDimensions[1] / 1.5}
         onMouseMove={(e) => {
-          setCursorPos(getRelativePointCoordinates(e.clientX, e.clientY, canvasRef));
+          setCursorPos(
+            getRelativePointCoordinates(e.clientX, e.clientY, canvasRef)
+          );
         }}
         onClick={(e) => {
           if (line) {

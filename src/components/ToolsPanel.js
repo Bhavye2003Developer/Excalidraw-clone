@@ -1,62 +1,53 @@
+import React from "react";
+import CircleIcon from "./CircleIcon";
+import EraserIcon from "./EraserIcon";
+import FreeHandIcon from "./FreeHandIcon";
+import LineIcon from "./LineIcon";
+import RectIcon from "./RectIcon";
+
 const ToolsPanel = ({ toolState, setToolState }) => {
   return (
-    <div className="flex w-40 mx-5 my-10 bg-gray-100 rounded-xl justify-center py-10">
-      <ul>
-        <li>
-          <button
-            className="border border-blue-500 bg-blue-400 py-1 px-2 rounded-xl hover:bg-blue-600"
-            onClick={() => {
-              setToolState({ ...toolState, clear: true });
-            }}
-          >
-            Clear
-          </button>
-        </li>
-        <br />
-        <li>
-          <button
-            className="border border-blue-500 bg-blue-400 py-1 px-2 rounded-xl hover:bg-blue-600"
-            onClick={() => {
-              setToolState({ ...toolState, line: true });
-            }}
-          >
-            Line
-          </button>
-        </li>
-        <br />
-        <li>
-          <button
-            className="border border-blue-500 bg-blue-400 py-1 px-2 rounded-xl hover:bg-blue-600"
-            onClick={() => {
-              setToolState({ ...toolState, rect: true });
-            }}
-          >
-            Rectangle
-          </button>
-        </li>
-        <br />
-        <li>
-          <button
-            className="border border-blue-500 bg-blue-400 py-1 px-2 rounded-xl hover:bg-blue-600"
-            onClick={() => {
-              setToolState({ ...toolState, circle: true });
-            }}
-          >
-            Circle
-          </button>
-        </li>
-        <br />
-        <li>
-          <button
-            className="border border-blue-500 bg-blue-400 py-1 px-2 rounded-xl hover:bg-blue-600"
-            onClick={() => {
-              setToolState({ ...toolState, freeHand: true });
-            }}
-          >
-            Free hand
-          </button>
-        </li>
-      </ul>
+    <div className="flex flex-col items-center w-12 mx-5 my-10 rounded-xl justify-center py-2">
+      <button
+        className="p-2 rounded-lg hover:bg-blue-600 mt-2"
+        onClick={() => {
+          setToolState({ ...toolState, clear: true });
+        }}
+      >
+        <EraserIcon />
+      </button>
+      <button
+        className="p-2 rounded-lg hover:bg-blue-600 mt-2"
+        onClick={() => {
+          setToolState({ ...toolState, line: true });
+        }}
+      >
+        <LineIcon />
+      </button>
+      <button
+        className="p-2 rounded-lg hover:bg-blue-600 mt-2"
+        onClick={() => {
+          setToolState({ ...toolState, rect: true });
+        }}
+      >
+        <RectIcon />
+      </button>
+      <button
+        className="p-2 rounded-lg hover:bg-blue-600 mt-2"
+        onClick={() => {
+          setToolState({ ...toolState, circle: true });
+        }}
+      >
+        <CircleIcon />
+      </button>
+      <button
+        className="p-2 rounded-lg hover:bg-blue-600 mt-2"
+        onClick={() => {
+          setToolState({ ...toolState, freeHand: true });
+        }}
+      >
+        <FreeHandIcon />
+      </button>
     </div>
   );
 };

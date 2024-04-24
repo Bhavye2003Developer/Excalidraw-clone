@@ -1,52 +1,55 @@
-import { useEffect, useState } from "react";
-import Board from "./Board";
-import ToolsPanel from "./ToolsPanel";
+import React, { useState } from "react";
+import ExportButton from "./ExportButton";
+import EditIcon from "./EditIcon";
+import DrawWindow from "./DrawWindow";
+import EditProjectNameModal from "./EditProjectNameModal";
 
 const Body = () => {
   const [toolState, setToolState] = useState({
     clear: false,
-    line: false, // if true, draw the line on canvas
+    line: false,
     rect: false,
     circle: false,
     freeHand: false,
   });
 
-  const [canvasURL, setCanvasURL] = useState(null);
+  const [projectName, setProjectName] = useState("User Project");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const []
 
   return (
-    <div className="flex">
-      <ToolsPanel toolState={toolState} setToolState={setToolState} />
-      <Board
-        clear={toolState.clear}
-        setClear={() => {
-          setToolState({ ...toolState, clear: false });
+    <div className="flex flex-col h-screen overflow-hidden">
+      <div className="flex justify-between items-center bg-gray-200 p-4 shadow-md mx-3 mt-2">
+        <div className="flex items-center space-x-2">
+          <div className="text-3xl font-bold text-blue-600">FastDraw</div>
+        </div>
+        <div className="flex text-lg font-bold text-gray-700">
+          {projectName}{" "}
+          <button
+            onClick={() => {
+              setIsModalOpen(true);
+            }}
+          >
+            <EditIcon />
+          </button>
+        </div>
+        <div>
+          <ExportButton projectName={projectName} />
+        </div>
+      </div>
+
+      <DrawWindow toolState={toolState} setToolState={setToolState} />
+
+      <EditProjectNameModal
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
         }}
-        line={toolState.line}
-        setLine={() => {
-          setToolState({ ...toolState, line: false });
-        }}
-        rect={toolState.rect}
-        setRect={() => {
-          setToolState({ ...toolState, rect: false });
-        }}
-        circle={toolState.circle}
-        setCircle={() => {
-          setToolState({ ...toolState, circle: false });
-        }}
-        freeHand={toolState.freeHand}
-        setFreeHand={() => {
-          setToolState({ ...toolState, freeHand: false });
+        projectName={projectName}
+        setProjectName={(updatedName) => {
+          setProjectName(updatedName);
         }}
       />
-      {/* <button
-        onClick={() => {
-          setCanvasURL(document.getElementById("canvas").toDataURL());
-        }}
-      >
-        <a href={canvasURL} download={"user_image"}>
-          EXPORT
-        </a>
-      </button> */}
     </div>
   );
 };
