@@ -2,10 +2,8 @@
   "name": "excalidraw-clone",
   "version": "1.0.0",
   "description": "Excalidraw clone",
-  "main": "index.js",
   "scripts": {
-    "start": "parcel index.html",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "parcel index.html"
   },
   "author": "Bhavye",
   "license": "ISC",
