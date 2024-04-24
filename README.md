@@ -2,6 +2,8 @@
 
 FastDraw is a simple drawing application built with React. It allows users to create and edit drawings using various tools.
 
+https://github.com/Bhavye2003Developer/FastDraw/assets/110657263/1de735db-c906-460a-8992-c97387b6e7ed
+
 ## Features
 
 - Drawing tools: Line, Rectangle, Circle, Freehand
